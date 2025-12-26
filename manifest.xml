@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <PoBVersion>
-	<Version number="0.14.0" />
+	<Version number="0.14.0-2e84d4376" />
 	<Source part="default" url="https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/{branch}/" />
 	<Source part="runtime" platform="win32" url="https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/{branch}/runtime/" />
 	<Source part="program" url="https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/{branch}/src/" />
 	<Source part="tree" url="https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/{branch}/src/" />
-	<File name="changelog.txt" part="default" sha1="a359fe92c2d175856e1990d4dbd83c145c7ff516" />
+	<File name="changelog.txt" part="default" sha1="f2b0d733ff176518e68174a1e8f51eb474ee125d" />
 	<File name="help.txt" part="default" sha1="eb788d20352333fad99bcf6092306f0c3bca3122" />
 	<File name="LICENSE.md" part="default" sha1="e81bd01e60cdf8646f3308ec71fa0e8e638d544e" />
 	<File name="Assets/ascendancypassiveheaderleft.png" part="program" sha1="c1c73a71cc742de4f2964da78e9ed8841ab7039d" />
@@ -148,7 +148,7 @@
 	<File name="Classes/TradeQuery.lua" part="program" sha1="24a3e9a816dad1ad4ce4534a8d61d734e98bf867" />
 	<File name="Classes/TradeQueryGenerator.lua" part="program" sha1="15b47414e5966409253b7a432bbf89fecec690bd" />
 	<File name="Classes/TradeQueryRateLimiter.lua" part="program" sha1="36213bd3f7ffa79f6e5a70e18929394c79cbbbf3" />
-	<File name="Classes/TradeQueryRequests.lua" part="program" sha1="9a149a68d962bcc801952455d68699224212b431" />
+	<File name="Classes/TradeQueryRequests.lua" part="program" sha1="6768b59389bb5d566f5166ea6d2d3c6e1352a1e7" />
 	<File name="Classes/TradeStatWeightMultiplierListControl.lua" part="program" sha1="2d3c11bb563279bffc4f93763a652a6f430ffd59" />
 	<File name="Classes/TreeTab.lua" part="program" sha1="524558cab6771bc164acb7565dfea7434b0b9957" />
 	<File name="Classes/UndoHandler.lua" part="program" sha1="ce4835c384c834da0de47b0302b1e774c8300c6b" />

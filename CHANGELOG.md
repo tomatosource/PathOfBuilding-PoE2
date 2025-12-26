@@ -1,5 +1,15 @@
 # Changelog
 
+## [beta](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/tree/beta) (2025/12/26)
+
+[Full Changelog](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/compare/v0.14.0...beta)
+
+
+## What's Changed
+### Other changes
+- Fix HTTP/2 response headers parsing [\#1668](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/pull/1668) ([meehl](https://github.com/meehl))
+
+
 ## [v0.14.0](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/tree/v0.14.0) (2025/12/19)
 
 [Full Changelog](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/compare/v0.13.0...v0.14.0)

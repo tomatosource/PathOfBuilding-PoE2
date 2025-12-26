@@ -1,3 +1,8 @@
+VERSION[beta][2025/12/26]
+
+--- Other changes ---
+* Fix HTTP/2 response headers parsing (meehl)
+
 VERSION[0.14.0][2025/12/19]
 
 --- New to Path of Building ---
