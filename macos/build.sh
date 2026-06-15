@@ -122,7 +122,14 @@ cmake --build "$BUILD_DIR" --config Release --parallel "$NCPU"
 log "Installing to $INSTALL_DIR..."
 cmake --build "$BUILD_DIR" --config Release --target install
 
-# ── 8. Collect ANGLE dylibs (EGL/GLESv2) ─────────────────────────────────────
+# ── 8. Flatten lib/ → root install dir ──────────────────────────────────────
+# cmake LIBRARY DESTINATION may land in a lib/ subdirectory on some platforms.
+# Copy everything up to the root so DYLD_LIBRARY_PATH and symlinks work.
+if [ -d "$INSTALL_DIR/lib" ]; then
+    find "$INSTALL_DIR/lib" -name "*.dylib" -exec cp -n {} "$INSTALL_DIR/" \; 2>/dev/null || true
+fi
+
+# ── Collect ANGLE dylibs (EGL/GLESv2) ─────────────────────────────────────
 # ANGLE's libEGL and libGLESv2 need to be beside the launcher.
 VCPKG_LIB="$BUILD_DIR/vcpkg_installed/$TRIPLET/lib"
 VCPKG_BIN="$BUILD_DIR/vcpkg_installed/$TRIPLET/bin"
