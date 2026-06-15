@@ -30,6 +30,25 @@ describe("TestDefence", function()
 		return build.calcsTab.calcs.reducePoolsByDamage(nil, takenDamages, build.calcsTab.calcsEnv.player)
 	end
 
+	it("converts total energy shield modifiers to mana", function()
+		build.configTab.input.customMods = "Convert 100% of maximum Energy Shield to maximum Mana\n100% increased maximum Mana"
+		build.configTab:BuildModList()
+		runCallback("OnFrame")
+
+		local manaWithoutTotalEnergyShield = build.calcsTab.mainOutput.Mana
+		local env = build.calcsTab.mainEnv
+		local player = env.player
+
+		player.modDB:NewMod("EnergyShieldTotal", "BASE", 100, "Test")
+		player.output = { }
+		build.calcsTab.calcs.defence(env, player)
+
+		assert.are.equals(0, player.output.EnergyShield)
+		assert.are.equals(0, player.modDB:Sum("BASE", nil, "ExtraMana"))
+		assert.are.equals(100, player.modDB:Sum("BASE", nil, "ManaTotal"))
+		assert.are.equals(manaWithoutTotalEnergyShield + 100, player.output.Mana)
+	end)
+
 	it("no armour max hits", function()
 		build.configTab.input.enemyIsBoss = "None"
 		build.configTab.input.customMods = ""
@@ -526,5 +545,66 @@ describe("TestDefence", function()
 		assert.are.equals(100, floor(poolsRemaining.Mana))
 		assert.are.equals(0, floor(poolsRemaining.Life))
 		assert.are.equals(0, floor(poolsRemaining.OverkillDamage))
+	end)
+	
+	it("uses block chance against projectile spells", function()
+		build.configTab.input.enemyIsBoss = "None"
+		build.configTab.input.enemyDamageType = "SpellProjectile"
+		build.configTab.input.customMods = [[
+			20% chance to block
+		]]
+		build.configTab:BuildModList()
+		runCallback("OnFrame")
+
+		assert.are.equals(20, build.calcsTab.calcsOutput.EffectiveBlockChance)
+		assert.are.equals(20, build.calcsTab.calcsOutput.EffectiveProjectileBlockChance)
+		assert.are.equals(20, build.calcsTab.calcsOutput.EffectiveSpellProjectileBlockChance)
+		assert.are.equals(80, build.calcsTab.calcsOutput.ConfiguredDamageChance)
+
+		build.configTab.input.enemyDamageType = "Average"
+		build.configTab:BuildModList()
+		runCallback("OnFrame")
+
+		assert.are.equals(15, build.calcsTab.calcsOutput.EffectiveAverageBlockChance)
+		assert.are.equals(85, build.calcsTab.calcsOutput.ConfiguredDamageChance)
+	end)
+
+	it("limits EHP speedup when hit damage is delayed", function()
+		local function assertClose(actual, expected)
+			assert.is_true(math.abs(actual - expected) < 0.01)
+		end
+
+		local function calcEHP(extraMods)
+			build.configTab.input.enemyPhysicalDamage = "500"
+			build.configTab.input.enemyFireDamage = "500"
+			build.configTab.input.enemyColdDamage = "500"
+			build.configTab.input.enemyLightningDamage = "500"
+			build.configTab.input.enemyChaosDamage = "0"
+			build.configTab.input.customMods = [[
+				+4000 to maximum Life
+				75% of Life Loss from Hits is prevented, then that much Life is lost over 4 seconds instead
+				+75% to all Elemental Resistances
+				+75% to Chaos Resistance
+				]] .. (extraMods or "")
+			pob1and2Compat()
+			runCallback("OnFrame")
+			runCallback("OnFrame")
+			local calcsOutput = build.calcsTab.calcsOutput
+			return {
+				TotalEHP = calcsOutput.TotalEHP,
+				EffectiveBlockChance = calcsOutput.EffectiveBlockChance,
+				NumberOfMitigatedDamagingHits = calcsOutput.NumberOfMitigatedDamagingHits,
+			}
+		end
+
+		local base = calcEHP()
+		local block = calcEHP("\n+10% to Block chance\n")
+
+		newBuild()
+
+		assertClose(base.TotalEHP, 17582.417582418)
+		assertClose(block.TotalEHP, 19008.019008019)
+		assertClose(block.EffectiveBlockChance, 10)
+		assert.is_true(block.TotalEHP > base.TotalEHP)
 	end)
 end)

@@ -275,7 +275,7 @@ function CalcBreakdownClass:AddModSection(sectionData, modList)
 	-- Build list of modifiers to display
 	local cfg = (sectionData.cfg and actor.mainSkill[sectionData.cfg.."Cfg"] and copyTable(actor.mainSkill[sectionData.cfg.."Cfg"], true)) or { }
 	cfg.source = sectionData.modSource
-	cfg.ignoreSourceinCheckConditions = true
+	cfg.ignoreSourceInCheckConditions = true
 	cfg.actor = sectionData.actor
 	local rowList
 	local modStore = (sectionData.enemy and actor.enemy.modDB) or (sectionData.cfg and actor.mainSkill.skillModList) or actor.modDB
@@ -481,6 +481,8 @@ function CalcBreakdownClass:AddModSection(sectionData, modList)
 					else
 						desc = "Skill type: "..(tag.neg and "Not " or "")..self:FormatModName(SkillTypeName[tag.skillType])
 					end
+				elseif tag.type == "BaseFlag" then
+					desc = "Base flag: "..(tag.neg and "Not " or "")..self:FormatModName(tostring(tag.baseFlag))
 				elseif tag.type == "SlotNumber" then
 					desc = "When in slot #"..tag.num
 				elseif tag.type == "GlobalEffect" then
