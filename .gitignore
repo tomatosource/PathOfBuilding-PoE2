@@ -1,3 +1,7 @@
+# macOS build artifacts
+SimpleGraphic-src/
+build-mac/
+
 # Development tools
 .idea/
 .vs/

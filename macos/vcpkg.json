@@ -1,0 +1,21 @@
+{
+  "name": "path-of-building-macos",
+  "version": "1.0",
+  "dependencies": [
+    {
+      "name": "angle",
+      "features": ["metal"]
+    },
+    "curl",
+    "fmt",
+    "glfw3",
+    "gli",
+    "ms-gsl",
+    "pkgconf",
+    "re2",
+    "sol2",
+    "zstd",
+    "zlib",
+    "libwebp"
+  ]
+}

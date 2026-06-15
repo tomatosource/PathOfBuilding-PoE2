@@ -1,0 +1,14 @@
+{
+  "default-registry": {
+    "kind": "builtin",
+    "baseline": "66c0373dc7fca549e5803087b9487edfe3aca0a1"
+  },
+  "registries": [
+    {
+      "kind": "filesystem",
+      "path": "/Users/geoff/g/src/github.com/tomatosource/PathOfBuilding-PoE2/SimpleGraphic-src/vcpkg-ports",
+      "baseline": "2025-10-07",
+      "packages": ["glfw3", "gli"]
+    }
+  ]
+}
