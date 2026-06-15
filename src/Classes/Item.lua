@@ -495,7 +495,11 @@ function ItemClass:ParseRaw(raw, rarity, highQuality)
 				elseif gameModeStage == "EXPLICIT" then
 					gameModeStage = "DONE"
 				elseif gameModeStage == "FINDIMPLICIT" and self.itemLevel and not line:match(" %(implicit%)") and
-						not line:match(" %(enchant%)") and not line:find("Talisman Tier") then
+						not line:match(" %(enchant%)") and not line:find("Talisman Tier") and
+						-- Do not treat item-property spec lines (Sockets/Rune/Implicits etc.) as the
+						-- start of explicit mods; they belong to the properties section of the clipboard.
+						not line:match("^Sockets: ") and not line:match("^Rune: ") and
+						not line:match("^Implicits: ") then
 					gameModeStage = "EXPLICIT"
 					foundExplicit = true
 				end

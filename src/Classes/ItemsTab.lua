@@ -1695,10 +1695,12 @@ function ItemsTabClass:CopyAnointsAndAugments(newItem, copyAugments, overwrite, 
 		-- if you don't have an equipped item that matches the type of the newItem, no need to do anything
 		if currentItem then
 			local modifiableItem = not (newItem.corrupted or newItem.mirrored or newItem.sanctified)
+			local itemWasModified = false
 			-- if the new item is anointable and does not have an anoint and your current respective item does, apply that anoint to the new item
 			if isAnointable(newItem) and (#newItem.enchantModLines == 0 or overwrite) and self.activeItemSet[newItemType].selItemId > 0 and modifiableItem then
 				local currentAnoint = currentItem.enchantModLines
 				newItem.enchantModLines = currentAnoint
+				itemWasModified = true
 			end
 
 			--https://www.poe2wiki.net/wiki/Augment_socket
@@ -1731,6 +1733,7 @@ function ItemsTabClass:CopyAnointsAndAugments(newItem, copyAugments, overwrite, 
 				end
 				newItem.itemSocketCount = #newItem.sockets
 				newItem:UpdateRunes()
+				itemWasModified = true
 			end
 
 			local validRunes = self:GetValidRunesForItem(newItem)
@@ -1750,9 +1753,17 @@ function ItemsTabClass:CopyAnointsAndAugments(newItem, copyAugments, overwrite, 
 					end
 				end
 				newItem:UpdateRunes()
+				itemWasModified = true
 			end
 
-			newItem:BuildAndParseRaw()
+			-- Only rebuild/re-parse when the item was actually modified.
+			-- Calling BuildAndParseRaw unconditionally causes a double-parse:
+			-- BuildRaw writes Sockets:/Rune: lines into the explicit-mod section
+			-- (due to the foundExplicit path in ParseRaw), and the re-parse then
+			-- treats those lines as real sockets/runes, doubling them.
+			if itemWasModified then
+				newItem:BuildAndParseRaw()
+			end
 		end
 	end
 end
