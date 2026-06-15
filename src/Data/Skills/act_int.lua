@@ -4801,10 +4801,20 @@ skills["CorpseCloudPlayer"] = {
 			incrementalEffectiveness = 0.12999999523163,
 			damageIncrementalEffectiveness = 0.0096000004559755,
 			statDescriptionScope = "corpse_cloud_statset_0",
+			statMap = {
+				["corpse_explosion_monster_life_permillage_chaos"] = {
+					skill("corpseExplosionLifeMultiplier", nil),
+					div = 1000,
+				},
+			},
 			baseFlags = {
-				spell = true,
 				area = true,
 				duration = true,
+			},
+			baseMods = {
+				mod("PoisonChance", "BASE", 100),
+				skill("explodeCorpse", true),
+				skill("corpseExplosionDamageType", "Chaos"),
 			},
 			constantStats = {
 				{ "active_skill_base_area_of_effect_radius", 16 },
@@ -6883,6 +6893,17 @@ skills["FallingThunderPlayer"] = {
 			baseEffectiveness = 0.62000000476837,
 			incrementalEffectiveness = 0.054999999701977,
 			statDescriptionScope = "falling_thunder",
+			statMap = {
+				["lightning_strike_damage_+%_final_per_power_charge"] = {
+					mod("Damage", "MORE", nil, ModFlag.Projectile, 0, { type = "Multiplier", var = "RemovablePowerCharge" }),
+				},
+				["lightning_strike_damage_+%_final_when_charged"] = {
+					mod("Damage", "MORE", nil, ModFlag.Projectile, 0, { type = "MultiplierThreshold", var = "RemovablePowerCharge", threshold = 1 }),
+				},
+				["lightning_strike_base_number_of_projectiles_per_power_charge"] = {
+					mod("ProjectileCount", "BASE", nil, 0, 0, { type = "Multiplier", var = "RemovablePowerCharge", base = -1 }),
+				},
+			},
 			baseFlags = {
 				attack = true,
 				projectile = true,
@@ -7592,6 +7613,16 @@ skills["FirestormPlayer"] = {
 			incrementalEffectiveness = 0.12999999523163,
 			damageIncrementalEffectiveness = 0.008899999782443,
 			statDescriptionScope = "firestorm_statset_0",
+			statMap = {
+				["fire_storm_fireball_delay_ms"] = {
+					skill("hitTimeOverride", nil),
+					div = 1000,
+				},
+				["rain_hit_delay_ms"] = {
+					skill("maxHitRatePerEnemy", nil),
+					div = 1000,
+				},
+			},
 			baseFlags = {
 				spell = true,
 				area = true,
@@ -7676,6 +7707,16 @@ skills["FirestormPlayer"] = {
 			incrementalEffectiveness = 0.12999999523163,
 			damageIncrementalEffectiveness = 0.008899999782443,
 			statDescriptionScope = "firestorm_statset_1",
+			statMap = {
+				["fire_storm_fireball_delay_ms"] = {
+					skill("hitTimeOverride", nil),
+					div = 1000,
+				},
+				["rain_hit_delay_ms"] = {
+					skill("maxHitRatePerEnemy", nil),
+					div = 1000,
+				},
+			},
 			baseFlags = {
 				spell = true,
 				area = true,
@@ -7765,6 +7806,16 @@ skills["FirestormPlayer"] = {
 			incrementalEffectiveness = 0.12999999523163,
 			damageIncrementalEffectiveness = 0.008899999782443,
 			statDescriptionScope = "firestorm_statset_2",
+			statMap = {
+				["fire_storm_fireball_delay_ms"] = {
+					skill("hitTimeOverride", nil),
+					div = 1000,
+				},
+				["rain_hit_delay_ms"] = {
+					skill("maxHitRatePerEnemy", nil),
+					div = 1000,
+				},
+			},
 			baseFlags = {
 				spell = true,
 				area = true,
@@ -11318,15 +11369,15 @@ skills["HeraldOfIcePlayer"] = {
 		["Crossbow"] = true,
 		["Dagger"] = true,
 		["Flail"] = true,
-		["One Handed Axe"] = true,
-		["One Handed Mace"] = true,
-		["One Handed Sword"] = true,
+		["One Hand Axe"] = true,
+		["One Hand Mace"] = true,
+		["One Hand Sword"] = true,
 		["Spear"] = true,
 		["Staff"] = true,
 		["Talisman"] = true,
-		["Two Handed Axe"] = true,
-		["Two Handed Mace"] = true,
-		["Two Handed Sword"] = true,
+		["Two Hand Axe"] = true,
+		["Two Hand Mace"] = true,
+		["Two Hand Sword"] = true,
 	},
 	castTime = 0,
 	qualityStats = {
@@ -12939,6 +12990,10 @@ skills["IcestormPlayer"] = {
 					skill("hitTimeOverride", nil),
 					div = 1000,
 				},
+				["rain_hit_delay_ms"] = {
+					skill("maxHitRatePerEnemy", nil),
+					div = 1000,
+				},
 			},
 			baseFlags = {
 				spell = true,
@@ -13021,6 +13076,12 @@ skills["IcestormPlayer"] = {
 			incrementalEffectiveness = 0.12999999523163,
 			damageIncrementalEffectiveness = 0.0082000000402331,
 			statDescriptionScope = "icestorm",
+			statMap = {
+				["rain_hit_delay_ms"] = {
+					skill("maxHitRatePerEnemy", nil),
+					div = 1000,
+				},
+			},
 			baseFlags = {
 				spell = true,
 				area = true,

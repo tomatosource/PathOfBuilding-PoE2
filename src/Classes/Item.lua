@@ -380,10 +380,16 @@ function ItemClass:ParseRaw(raw, rarity, highQuality)
 			charmBuffLines[line] = nil
 		elseif line == "--------" then
 			self.checkSection = true
+		elseif line == "Sanctified" then
+			self.sanctified = true
+			self.corruptible = false
 		elseif line == "Mirrored" then
 			self.mirrored = true
 		elseif line == "Corrupted" then
 			self.corrupted = true
+		elseif line == "Twice Corrupted" then
+			self.corrupted = true
+			self.doubleCorrupted = true
 		elseif line == "Desecrated Prefix" or line == "Desecrated Suffix" then
 			self.desecrated = true
 		elseif line == "Requirements:" then
@@ -709,8 +715,7 @@ function ItemClass:ParseRaw(raw, rarity, highQuality)
 						self.affixes = (self.base.subType and data.itemMods[self.base.type..self.base.subType])
 								or data.itemMods[self.base.type]
 								or data.itemMods.Item
-						self.corruptible = self.base.type ~= "Flask" and self.base.type ~= "Charm" and self.base.type ~= "Rune" and self.base.type ~= "SoulCore"
-						self.clusterJewel = data.clusterJewels and data.clusterJewels.jewels[self.baseName]
+						self.corruptible = self.base.type ~= "Flask" and self.base.type ~= "Charm" and self.base.type ~= "Rune" and self.base.type ~= "SoulCore" and self.base.type ~= "Transcendent Limb"
 						self.requirements.str = self.base.req.str or 0
 						self.requirements.dex = self.base.req.dex or 0
 						self.requirements.int = self.base.req.int or 0
@@ -1094,7 +1099,7 @@ function ItemClass:NormaliseQuality()
 		if not self.quality then
 			self.quality = 0
 		elseif not self.uniqueID and not self.corrupted and not self.mirrored and not (self.base.type == "Charm") and self.quality < self.base.quality then -- charms cannot be modified by quality currency.
-			self.quality = self.base.quality
+			self.quality = main.defaultItemQuality
 		end
 	end	
 end
@@ -1294,7 +1299,12 @@ function ItemClass:BuildRaw()
 	if self.mirrored then
 		t_insert(rawLines, "Mirrored")
 	end
-	if self.corrupted then
+	if self.sanctified then
+		t_insert(rawLines, "Sanctified")
+	end
+	if self.doubleCorrupted then
+		t_insert(rawLines, "Twice Corrupted")
+	elseif self.corrupted then
 		t_insert(rawLines, "Corrupted")
 	end
 	return table.concat(rawLines, "\n")
@@ -1445,6 +1455,10 @@ function ItemClass:GetPrimarySlot()
 		return "Ring 1"
 	elseif self.type == "Flask" then
 		return "Flask 1"
+	elseif self.base.subType == "Transcendent Leg" then
+		return "Leg 1"
+	elseif self.base.subType == "Transcendent Arm" then
+		return "Arm 1"
 	else
 		return self.type
 	end
