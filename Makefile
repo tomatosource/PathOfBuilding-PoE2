@@ -5,7 +5,7 @@ INSTALL_DIR := $(BUILD_DIR)/install
 BINARY      := $(INSTALL_DIR)/PathOfBuilding
 SCRIPT      := $(REPO_ROOT)/src/Launch.lua
 
-.PHONY: run build clean clean-all
+.PHONY: run build install-app clean clean-all
 
 run: build
 	@echo "Starting Path of Building..."
@@ -16,6 +16,9 @@ run: build
 
 build:
 	@bash "$(REPO_ROOT)/macos/build.sh"
+
+install-app: build
+	@bash "$(REPO_ROOT)/macos/make_app.sh"
 
 clean:
 	rm -rf "$(BUILD_DIR)"
