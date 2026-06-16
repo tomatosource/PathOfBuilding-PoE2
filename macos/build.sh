@@ -31,16 +31,19 @@ if [ ! -f "/opt/homebrew/opt/luajit/lib/libluajit-5.1.a" ]; then
 fi
 log "Found Homebrew LuaJIT at /opt/homebrew/opt/luajit"
 
-# ── 1. Clone SimpleGraphic ───────────────────────────────────────────────────
-if [ ! -d "$SG_DIR/.git" ]; then
+# ── 1. Clone/verify SimpleGraphic ────────────────────────────────────────────
+if [ ! -f "$SG_DIR/CMakeLists.txt" ]; then
+    # Source not present — clone from upstream.
     log "Cloning SimpleGraphic (this may take a few minutes)..."
     git clone --recursive \
         "https://github.com/PathOfBuildingCommunity/PathOfBuilding-SimpleGraphic.git" \
         "$SG_DIR"
-else
+elif [ -d "$SG_DIR/.git" ]; then
     log "SimpleGraphic already cloned at $SG_DIR"
     # Ensure submodules are populated (vcpkg, dep/, libs/)
     (cd "$SG_DIR" && git submodule update --init --recursive --quiet)
+else
+    log "SimpleGraphic inlined in repo at $SG_DIR"
 fi
 
 # ── 2. Apply macOS patches ────────────────────────────────────────────────────
