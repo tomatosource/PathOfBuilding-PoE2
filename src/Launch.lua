@@ -84,6 +84,15 @@ function launch:OnInit()
 		-- Run a background update check if developer mode is off
 		self:CheckForUpdate(true)
 	end
+
+	-- Start the local API server
+	local APIServer  = LoadModule("Modules/APIServer")
+	local APIHandlers = LoadModule("Modules/APIHandlers")
+	if APIServer and APIHandlers then
+		self.apiServer = APIServer.new()
+		APIHandlers.register(self.apiServer)
+		self.apiServer:Start()
+	end
 end
 
 function launch:CanExit()
@@ -100,12 +109,14 @@ function launch:CanExit()
 end
 
 function launch:OnExit()
+	if self.apiServer then self.apiServer:Stop() end
 	if self.main and self.main.Shutdown then
 		PCall(self.main.Shutdown, self.main)
 	end
 end
 
 function launch:OnFrame()
+	if self.apiServer then self.apiServer:Poll() end
 	if self.main then
 		if self.main.OnFrame then
 			local errMsg = PCall(self.main.OnFrame, self.main)
