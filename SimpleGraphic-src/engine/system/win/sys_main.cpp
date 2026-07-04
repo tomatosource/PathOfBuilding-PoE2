@@ -675,7 +675,10 @@ bool sys_main_c::Run(int argc, char** argv)
 		// Initialise engine
 		core->Init(argc, argv);
 
-		// Run frame loop
+		// Run frame loop — capped at 60 fps so high-DPI Retina displays don't burn
+		// unnecessary GPU/CPU cycles. PoB is a calculator; 60 fps is imperceptible.
+		constexpr auto kFrameBudget = std::chrono::duration<double>(1.0 / 60.0);
+		auto lastFrame = std::chrono::steady_clock::now();
 		while (exitFlag == false) {
 			if (minimized) {
 				glfwWaitEventsTimeout(0.1);
@@ -693,6 +696,17 @@ bool sys_main_c::Run(int argc, char** argv)
 			if (threadError) {
 				Error(threadError);
 			}
+
+#ifdef __APPLE__
+			// Retina displays multiply pixel count 4x, making uncapped loops expensive.
+			// Sleep the remainder of each 60fps frame budget so the OS can idle the cores.
+			auto now = std::chrono::steady_clock::now();
+			auto elapsed = now - lastFrame;
+			if (elapsed < kFrameBudget) {
+				std::this_thread::sleep_for(kFrameBudget - elapsed);
+			}
+			lastFrame = std::chrono::steady_clock::now();
+#endif
 		}
 
 		// Shutdown engine
